@@ -66,21 +66,33 @@ function Header() {
 }
 
 function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
   return (
     <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzas.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>"No pizza available."</p>
+      )}
+
+      {/* <Pizza
         name="Pizza Spinaci"
         ingredients="Tomato, mozarella, spinach, and ricotta cheese"
         photoName="pizzas/spinaci.jpg"
-        price="10"
+        price={10}
       />
       <Pizza
         name="Pizza Funghi"
         ingredients="Tomato, mushrooms"
-        price="12"
+        price={12}
         photoName="pizzas/funghi.jpg"
-      />
+      /> */}
     </main>
   );
 }
@@ -94,20 +106,40 @@ function Footer() {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}. We're currently open!
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          "We're happy to serve you between {openHour}:00 and {closeHour}:00"
+        </p>
+      )}
     </footer>
   );
 }
 
-function Pizza(props) {
+function Order(props) {
   return (
-    <div className="pizza">
-      <img src={props.photoName} alt={props.name} />
-      <h3>{props.name}</h3>
-      <p>{props.ingredients}</p>
+    <div className="order">
+      <p>We're open until {props.closeHour}:00. Come visit us order online.</p>
+      <button className="btn">Order</button>
     </div>
   );
 }
+
+function Pizza(props) {
+  console.log(props);
+  return (
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <div>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price + 3}</span>
+      </div>
+    </li>
+  );
+}
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
